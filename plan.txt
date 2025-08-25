@@ -1,0 +1,11 @@
+Кароче тестирование
+server\
+    db\
+        __init__
+        config
+        models
+    routers
+    tests
+    schemas
+    __init__
+run_server.py
