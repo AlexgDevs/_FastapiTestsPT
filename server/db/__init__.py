@@ -16,7 +16,8 @@ from sqlalchemy import (
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
-    mapped_column)
+    mapped_column,
+    relationship)
 
 from .config import db_settings
 
@@ -39,10 +40,8 @@ Session = async_sessionmaker(
 
 async def get_db():
     async with Session() as session:
-        try:
             yield session
-        finally:
-            session.close()
+
 
 
 class DBManager:
@@ -69,7 +68,11 @@ db_manager = DBManager(engine)
 
 
 from .models import (
-    User
+    User,
+    Account,
+    Card,
+    Transaction,
+    AccountTransaction
 )
 
 

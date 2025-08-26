@@ -1,5 +1,2 @@
-import asyncio
-from server import (
-    app,
-    main_db
-    )
+from server import app
+#uvicorn run_server:app --reload

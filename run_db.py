@@ -1,4 +1,8 @@
+from server import db_manager
 import asyncio
-from server import main_db
 
-asyncio.run(main_db())
+async def main():
+    await db_manager.drop()
+    await db_manager.up()
+
+asyncio.run(main())
