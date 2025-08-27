@@ -24,5 +24,5 @@ class Account(Base):
 
     transactions: Mapped[List['Transaction']] = relationship('Transaction', back_populates='account')
     
-    from_account_transactions: Mapped[List['AccountTransaction']] = relationship('AccountTransaction', back_populates='from_account')
-    to_account_transactions: Mapped[List['AccountTransaction']] = relationship('AccountTransaction', back_populates='to_account')
+    from_account_transactions: Mapped[List['AccountTransaction']] = relationship('AccountTransaction', back_populates='from_account', foreign_keys='AccountTransaction.from_account_id')
+    to_account_transactions: Mapped[List['AccountTransaction']] = relationship('AccountTransaction', back_populates='to_account', foreign_keys='AccountTransaction.to_account_id')

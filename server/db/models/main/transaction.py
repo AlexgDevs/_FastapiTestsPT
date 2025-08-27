@@ -36,11 +36,11 @@ class AccountTransaction(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
     user: Mapped['User'] = relationship('User', back_populates='account_transactions', uselist=False)
 
-    form_account_id: Mapped[int] = mapped_column(ForeignKey('accounts.id'))
-    from_account: Mapped['Account'] = relationship('Account', back_populates='from_account_transactions', uselist=False)
+    from_account_id: Mapped[int] = mapped_column(ForeignKey('accounts.id'))
+    from_account: Mapped['Account'] = relationship('Account', back_populates='from_account_transactions', uselist=False, foreign_keys=[from_account_id])
 
     to_account_id: Mapped[int] = mapped_column(ForeignKey('accounts.id'))
-    to_account: Mapped['Account'] = relationship('Account', back_populates='to_account_transactions', uselist=False)
+    to_account: Mapped['Account'] = relationship('Account', back_populates='to_account_transactions', uselist=False, foreign_keys=[to_account_id])
 
     created_at: Mapped[DateTime] = mapped_column(DateTime, default=datetime.now)
     amount: Mapped[int]

@@ -1,3 +1,4 @@
+from fastapi import HTTPException, status  
 from typing import List, Literal
 from datetime import datetime
 
@@ -10,14 +11,16 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy import (
     String,
     ForeignKey,
-    DateTime
+    DateTime,
+    select
 )
 
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
     mapped_column,
-    relationship)
+    relationship,
+    joinedload)
 
 from .config import db_settings
 
@@ -36,13 +39,6 @@ Session = async_sessionmaker(
     bind=engine,
     expire_on_commit=True
 )
-
-
-async def get_db():
-    async with Session() as session:
-            yield session
-
-
 
 class DBManager:
     def __init__(self, engine: AsyncEngine):
@@ -65,6 +61,37 @@ class DBManager:
 
 
 db_manager = DBManager(engine)
+
+
+class DBHelper:
+    @staticmethod
+    async def get_user(user_id: int):
+        async with Session() as session:
+            user = await session.scalar(
+                select(User)
+                .where(User.id == user_id)
+            )
+
+            if user:
+                return user
+            
+        return None
+
+
+async def get_session(begin: bool):
+    async with Session() as session:
+        try:
+            if begin:
+                async with session.begin():
+                    yield session
+            else:
+                yield session
+        finally:
+            await session.close()
+
+
+async def get_session_begin():
+    await get_session(begin=True)
 
 
 from .models import (

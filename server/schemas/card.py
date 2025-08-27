@@ -12,3 +12,4 @@ class CardResponse(BaseModel):
 
     class Config:
         from_attributes = True
+

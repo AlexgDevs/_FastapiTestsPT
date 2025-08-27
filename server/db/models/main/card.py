@@ -19,7 +19,7 @@ class Card(Base):
     expire_date: Mapped[str] = mapped_column(String(5))
     created_at: Mapped[DateTime] = mapped_column(DateTime, default=datetime.now)
 
-    account_id: Mapped[int] = mapped_column('accounts.id')
+    account_id: Mapped[int] = mapped_column(ForeignKey('accounts.id'))
     account: Mapped['Account'] = relationship('Account', back_populates='cards', uselist=False)
 
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))

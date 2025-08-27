@@ -1,7 +1,6 @@
 from dotenv import load_dotenv
 from os import getenv
 
-
 load_dotenv()
 
 class DBSettings:
@@ -10,3 +9,4 @@ class DBSettings:
         self.echo_sql: bool = echo_sql
 
 db_settings = DBSettings(database_url=getenv('DB_URL'), echo_sql=True)
+
