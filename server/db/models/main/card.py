@@ -17,6 +17,7 @@ class Card(Base):
     card_number: Mapped[str] = mapped_column(String(16))
     cvv: Mapped[str] = mapped_column(String(3))
     expire_date: Mapped[str] = mapped_column(String(5))
+    created_at: Mapped[DateTime] = mapped_column(DateTime, default=datetime.now)
 
     account_id: Mapped[int] = mapped_column('accounts.id')
     account: Mapped['Account'] = relationship('Account', back_populates='cards', uselist=False)

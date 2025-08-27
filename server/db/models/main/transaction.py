@@ -23,6 +23,8 @@ class Transaction(Base):
     user: Mapped['User'] = relationship('User', back_populates='transactions', uselist=False)
 
     transaction_type: Mapped[Literal['from_account', 'to_account']]
+
+    created_at: Mapped[DateTime] = mapped_column(DateTime, default=datetime.now)    
     amount: Mapped[int]
 
 
@@ -40,4 +42,5 @@ class AccountTransaction(Base):
     to_account_id: Mapped[int] = mapped_column(ForeignKey('accounts.id'))
     to_account: Mapped['Account'] = relationship('Account', back_populates='to_account_transactions', uselist=False)
 
+    created_at: Mapped[DateTime] = mapped_column(DateTime, default=datetime.now)
     amount: Mapped[int]
