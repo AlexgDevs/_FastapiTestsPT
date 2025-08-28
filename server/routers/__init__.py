@@ -9,3 +9,4 @@ from fastapi import (
 
 from .user import user_app
 from .card import card_app
+from .account import account_app

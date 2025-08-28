@@ -90,6 +90,21 @@ class DBHelper:
                 return card
             
         return None
+    
+
+    @staticmethod
+    async def get_account(user_id: int, account_id: int):
+        async with Session() as session:
+            account = await session.scalar(
+                select(Account)
+                .where(Account.id == account_id, Account.user_id == user_id)
+                .options(joinedload(Account.user))
+            )
+
+            if account:
+                return account
+        
+        return None 
 
 
 async def get_session(begin: bool = False):

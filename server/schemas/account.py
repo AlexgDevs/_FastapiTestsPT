@@ -17,3 +17,9 @@ class AccountResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class CreateAccountModel(BaseModel):
+    account_name: str
+    balance: int
+    user_id: int
