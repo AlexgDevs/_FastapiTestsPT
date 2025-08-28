@@ -13,7 +13,7 @@ class UserResponse(BaseModel):
     email: str
     cards: List[CardResponse]
     accounts: List[AccountResponse]
-    # transactions: List[TransactionResponse]
+    transactions: List[TransactionResponse]
     account_transactions: List[AccountTransactionResponse]
 
     class Config:

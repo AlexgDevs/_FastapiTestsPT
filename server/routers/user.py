@@ -40,12 +40,14 @@ async def get_all_users():
         users = await session.scalars(
         select(User)
         .options(
-            joinedload(User.cards).joinedload(Card.user),
+            joinedload(User.cards),
             joinedload(User.accounts).joinedload(Account.user),
             joinedload(User.account_transactions).joinedload(AccountTransaction.to_account).joinedload(Account.user),
             joinedload(User.account_transactions).joinedload(AccountTransaction.from_account).joinedload(Account.user),
-            joinedload(User.account_transactions).joinedload(AccountTransaction.card).joinedload(Card.user),
-            joinedload(User.account_transactions).joinedload(AccountTransaction.user)
+            joinedload(User.account_transactions).joinedload(AccountTransaction.card),
+            joinedload(User.account_transactions).joinedload(AccountTransaction.user),
+            joinedload(User.transactions).joinedload(Transaction.account).joinedload(Account.user),
+            joinedload(User.transactions).joinedload(Transaction.card)
         )
         )
         return users.unique().all()

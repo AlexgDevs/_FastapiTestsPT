@@ -15,7 +15,7 @@ class CardResponse(BaseModel):
     cvv: str 
     expire_date: str  
     created_at: datetime
-    user: UserCardResponse
+    user_id: int
 
     class Config:
         from_attributes = True
