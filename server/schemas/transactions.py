@@ -39,4 +39,5 @@ class CreateTransactionModel(BaseModel):
     amount: int
     card_id: int
     account_id: int
+    user_id: int
     transaction_type: Literal['from_account', 'to_account']

@@ -135,20 +135,14 @@ class DBHelper:
         return None
 
 
-async def get_session(begin: bool = False):
+async def get_session():
     async with Session() as session:
-        try:
-            if begin:
-                async with session.begin():
-                    yield session
-            else:
-                yield session
-        finally:
-            await session.close()
+        yield session
 
 
 async def get_session_begin():
-    await get_session(begin=True)
+    async with Session.begin() as session:
+        yield session
 
 
 from .models import (

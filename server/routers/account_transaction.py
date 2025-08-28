@@ -14,7 +14,8 @@ from ..db import (
     get_session,
     joinedload,
     get_session_begin,
-    AccountTransaction
+    AccountTransaction,
+    Account
 )
 
 from ..schemas import (
@@ -34,9 +35,9 @@ async def get_account_transactions(session: AsyncSession = Depends(get_session))
     acc_transactions = await session.scalars(
         select(AccountTransaction)
         .options(
-            joinedload(AccountTransaction.to_account),
-            joinedload(AccountTransaction.from_account),
-            joinedload(AccountTransaction.card)
+            joinedload(AccountTransaction.to_account).joinedload(Account.user),
+            joinedload(AccountTransaction.from_account).joinedload(Account.user),
+            joinedload(AccountTransaction.card).joinedload(Card.user)
         ))
 
     return acc_transactions.unique().all()
@@ -66,7 +67,7 @@ async def get_account_transactions_by_user(user_id: int, session: AsyncSession =
 async def create_acc_transaction(
     transaction_data: CreateAccountTransactionModel,
     session: AsyncSession = Depends(get_session_begin)):
-    session.add(**transaction_data.model_dump())
+    session.add(AccountTransaction(**transaction_data.model_dump()))
     return {'status': 'created'}
 
 

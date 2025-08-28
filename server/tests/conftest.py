@@ -10,6 +10,5 @@ load_dotenv()
 
 @fixture
 async def get_client_session():
-    session = ClientSession()
-    yield session
-    session.close()
+    async with ClientSession('http://127.0.0.1:8000') as session:
+        yield session

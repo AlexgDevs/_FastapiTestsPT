@@ -59,10 +59,10 @@ async def get_transactions_by_user(user_id: int, session: AsyncSession = Depends
                         status_code=status.HTTP_201_CREATED,
                         summary='Create transaction',
                         description='endpoint for creating transactions')
-async def create_acc_transaction(
+async def create_transaction(
     transaction_data: CreateTransactionModel,
     session: AsyncSession = Depends(get_session_begin)):
-    session.add(**transaction_data.model_dump())
+    session.add(Transaction(**transaction_data.model_dump()))
     return {'status': 'created'}
 
 

@@ -10,7 +10,7 @@ from ..schemas import (
     UserResponse,
     CreateUserModel,
     PatchUserModel,
-    PutUpdateModel
+    PutUpdateModel,
 )
 
 from ..db import (
@@ -21,7 +21,11 @@ from ..db import (
     DBHelper,
     AsyncSession,
     get_session,
-    get_session_begin
+    get_session_begin,
+    Transaction,
+    AccountTransaction,
+    Card,
+    Account
 )
 
 user_app = APIRouter(prefix='/users', tags=['Users'])
@@ -34,15 +38,17 @@ user_app = APIRouter(prefix='/users', tags=['Users'])
 async def get_all_users():
     async with Session() as session:
         users = await session.scalars(
-            select(User)
-            .options(
-                joinedload(User.cards),
-                joinedload(User.accounts),
-                joinedload(User.transactions),
-                joinedload(User.account_transactions))
+        select(User)
+        .options(
+            joinedload(User.cards).joinedload(Card.user),
+            joinedload(User.accounts).joinedload(Account.user),
+            joinedload(User.account_transactions).joinedload(AccountTransaction.to_account).joinedload(Account.user),
+            joinedload(User.account_transactions).joinedload(AccountTransaction.from_account).joinedload(Account.user),
+            joinedload(User.account_transactions).joinedload(AccountTransaction.card).joinedload(Card.user),
+            joinedload(User.account_transactions).joinedload(AccountTransaction.user)
         )
-
-        return users.all()
+        )
+        return users.unique().all()
 
 
 @user_app.get('/{user_id}',
@@ -74,7 +80,7 @@ async def get_user_by_id(user_id: int, session: AsyncSession = Depends(get_sessi
             summary='Create user',
             description='endpoint for creating user')
 async def create_user(user_data: CreateUserModel, session: AsyncSession = Depends(get_session_begin)):
-    session.add(**user_data.model_dump())
+    session.add(User(**user_data.model_dump()))
     return {'status': 'created'}
 
 
@@ -117,7 +123,7 @@ async def put_update_user(user_id: int, user_data: PutUpdateModel, session: Asyn
 async def delete_user(user_id: int, session: AsyncSession = Depends(get_session)):
     user = await DBHelper.get_user(user_id)
     if user:
-        session.delete(user)
+        await session.delete(user)
         return {'status': 'deleted'}
 
     raise HTTPException(

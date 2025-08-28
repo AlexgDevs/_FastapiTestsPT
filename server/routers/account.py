@@ -72,7 +72,7 @@ async def get_account_by_user_account_id(user_id: int, account_id: int):
                 summary='Create account',
                 description='endpoind for creating account')
 async def create_account(account_data: CreateAccountModel, session: AsyncSession = Depends(get_session_begin)):
-    session.add(**account_data.model_dump())
+    session.add(Account(**account_data.model_dump()))
     return {'status': 'created'}
 
 

@@ -71,7 +71,7 @@ async def get_card_by_card_id(user_id: int, card_id: int):
             summary='Created card',
             description='endpoind for creating card for account')
 async def create_card(card_data: CreateCardModel, session: AsyncSession = Depends(get_session_begin)):
-    session.add(**card_data.model_dump())
+    session.add(Card(**card_data.model_dump()))
     return {'status': 'created'}
 
 
