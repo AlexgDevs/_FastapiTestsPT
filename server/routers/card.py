@@ -9,7 +9,6 @@ from . import (
 from ..db import (
     select,
     Card,
-    User,
     DBHelper,
     AsyncSession,
     get_session,
@@ -19,7 +18,6 @@ from ..db import (
 
 from ..schemas import (
     CardResponse,
-    UserResponse,
     CreateCardModel)
 
 card_app = APIRouter(prefix='/cards', tags=['Cards'])

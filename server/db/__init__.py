@@ -104,7 +104,35 @@ class DBHelper:
             if account:
                 return account
         
-        return None 
+        return None
+    
+
+    @staticmethod
+    async def get_acc_transaction(user_id: int, transaction_id: int):
+        async with Session() as session:
+            transaction = await session.scalar(
+                select(AccountTransaction)
+                .where(AccountTransaction.id == transaction_id, AccountTransaction.user_id == user_id)
+            )
+
+            if transaction:
+                return transaction
+        
+        return None
+    
+
+    @staticmethod
+    async def get_transaction(user_id: int, transaction_id: int):
+        async with Session() as session:
+            transaction = await session.scalar(
+                select(Transaction)
+                .where(Transaction.id == transaction_id, Transaction.user_id == user_id)
+            )
+
+            if transaction:
+                return transaction
+        
+        return None
 
 
 async def get_session(begin: bool = False):
