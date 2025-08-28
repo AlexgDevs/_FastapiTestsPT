@@ -52,9 +52,9 @@ async def get_account_transactions_by_user(user_id: int, session: AsyncSession =
         select(AccountTransaction)
         .where(AccountTransaction.user_id == user_id)
         .options(
-            joinedload(AccountTransaction.to_account),
-            joinedload(AccountTransaction.from_account),
-            joinedload(AccountTransaction.card)
+            joinedload(AccountTransaction.to_account).joinedload(Account.user),
+            joinedload(AccountTransaction.from_account).joinedload(Account.user),
+            joinedload(AccountTransaction.card).joinedload(Card.user)
         ))
 
     return acc_transactions.unique().all()

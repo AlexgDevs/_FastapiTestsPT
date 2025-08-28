@@ -14,7 +14,8 @@ from ..db import (
     get_session,
     joinedload,
     get_session_begin,
-    Transaction
+    Transaction,
+    Account
 )
 
 from ..schemas import (
@@ -33,7 +34,7 @@ async def get_transactions(session: AsyncSession = Depends(get_session)):
     transactions = await session.scalars(
         select(Transaction)
         .options(
-            joinedload(Transaction.account),
+            joinedload(Transaction.account).joinedload(Account.user),
             joinedload(Transaction.card)
         ))
 
@@ -49,7 +50,7 @@ async def get_transactions_by_user(user_id: int, session: AsyncSession = Depends
         select(Transaction)
         .where(Transaction.user_id == user_id)
         .options(
-            joinedload(Transaction.account),
+            joinedload(Transaction.account).joinedload(Account.user),
             joinedload(Transaction.card)
         ))
     return transactions.unique().all()
