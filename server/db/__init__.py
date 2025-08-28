@@ -76,9 +76,23 @@ class DBHelper:
                 return user
             
         return None
+    
+
+    @staticmethod
+    async def get_card(user_id: int, card_id: int):
+        async with Session() as session:
+            card = await session.scalar(
+                select(Card)
+                .where(Card.id == card_id, Card.user_id == user_id)
+            )
+
+            if card:
+                return card
+            
+        return None
 
 
-async def get_session(begin: bool):
+async def get_session(begin: bool = False):
     async with Session() as session:
         try:
             if begin:

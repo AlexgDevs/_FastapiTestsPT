@@ -49,35 +49,33 @@ async def get_all_users():
             response_model=UserResponse,
             summary='Get user by id',
             description='endpoint for getting user by id')
-async def get_user_by_id(user_id: int):
-    async with Session() as session:
-        user = await session.scalar(
-            select(User)
-            .where(User.id == user_id)
-            .options(
-                joinedload(User.cards),
-                joinedload(User.accounts),
-                joinedload(User.transactions),
-                joinedload(User.account_transactions))
-        )
+async def get_user_by_id(user_id: int, session: AsyncSession = Depends(get_session)):
+    user = await session.scalar(
+        select(User)
+        .where(User.id == user_id)
+        .options(
+            joinedload(User.cards),
+            joinedload(User.accounts),
+            joinedload(User.transactions),
+            joinedload(User.account_transactions))
+    )
 
-        if user:
-            return user
+    if user:
+        return user
 
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='User not found'
-        )
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail='User not found'
+    )
 
 
 @user_app.post('/',
             status_code=status.HTTP_201_CREATED,
             summary='Create user',
             description='endpoint for creating user')
-async def create_user(user_data: CreateUserModel):
-    async with Session.begin() as session:
-        session.add(**user_data.model_dump())
-        return {'status': 'created'}
+async def create_user(user_data: CreateUserModel, session: AsyncSession = Depends(get_session_begin)):
+    session.add(**user_data.model_dump())
+    return {'status': 'created'}
 
 
 @user_app.patch('/{user_id}',
@@ -101,7 +99,7 @@ async def patch_update_user(user_id: int, user_data: PatchUserModel, session: As
             summary='Put update user',
             description='endpoint for put update user')
 async def put_update_user(user_id: int, user_data: PutUpdateModel, session: AsyncSession = Depends(get_session_begin)):
-    user = DBHelper.get_user(user_id)
+    user = await DBHelper.get_user(user_id)
     if user:
         await session.merge(User(id=user.id, **user_data.model_dump()))
         return {'status': 'put updated'}
@@ -117,7 +115,7 @@ async def put_update_user(user_id: int, user_data: PutUpdateModel, session: Asyn
                 summary='Delete user',
                 description='endpoind for deleted user')
 async def delete_user(user_id: int, session: AsyncSession = Depends(get_session)):
-    user = DBHelper.get_user(user_id)
+    user = await DBHelper.get_user(user_id)
     if user:
         session.delete(user)
         return {'status': 'deleted'}

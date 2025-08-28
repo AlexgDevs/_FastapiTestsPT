@@ -10,7 +10,6 @@ from .transactions import TransactionResponse, AccountTransactionResponse
 class UserResponse(BaseModel):
     id: int
     name: str
-    password: str
     email: str
     cards: List[CardResponse]
     accounts: List[AccountResponse]

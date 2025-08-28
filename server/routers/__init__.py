@@ -8,3 +8,4 @@ from fastapi import (
     )
 
 from .user import user_app
+from .card import card_app
