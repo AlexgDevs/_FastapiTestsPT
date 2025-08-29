@@ -34,6 +34,9 @@ class TransactionResponse(BaseModel):
     account: AccountResponse
     transaction_type: Literal['from_account', 'to_account']
 
+    class Config:
+        from_attributes = True
+
 
 class CreateTransactionModel(BaseModel):
     amount: int

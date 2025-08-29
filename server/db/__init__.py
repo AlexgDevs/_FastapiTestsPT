@@ -1,4 +1,4 @@
-from fastapi import HTTPException, status  
+from fastapi import HTTPException, status, Depends
 from typing import List, Literal
 from datetime import datetime
 
@@ -63,78 +63,6 @@ class DBManager:
 db_manager = DBManager(engine)
 
 
-class DBHelper:
-    @staticmethod
-    async def get_user(user_id: int):
-        async with Session() as session:
-            user = await session.scalar(
-                select(User)
-                .where(User.id == user_id)
-            )
-
-            if user:
-                return user
-            
-        return None
-    
-
-    @staticmethod
-    async def get_card(user_id: int, card_id: int):
-        async with Session() as session:
-            card = await session.scalar(
-                select(Card)
-                .where(Card.id == card_id, Card.user_id == user_id)
-            )
-
-            if card:
-                return card
-            
-        return None
-    
-
-    @staticmethod
-    async def get_account(user_id: int, account_id: int):
-        async with Session() as session:
-            account = await session.scalar(
-                select(Account)
-                .where(Account.id == account_id, Account.user_id == user_id)
-                .options(joinedload(Account.user))
-            )
-
-            if account:
-                return account
-        
-        return None
-    
-
-    @staticmethod
-    async def get_acc_transaction(user_id: int, transaction_id: int):
-        async with Session() as session:
-            transaction = await session.scalar(
-                select(AccountTransaction)
-                .where(AccountTransaction.id == transaction_id, AccountTransaction.user_id == user_id)
-            )
-
-            if transaction:
-                return transaction
-        
-        return None
-    
-
-    @staticmethod
-    async def get_transaction(user_id: int, transaction_id: int):
-        async with Session() as session:
-            transaction = await session.scalar(
-                select(Transaction)
-                .where(Transaction.id == transaction_id, Transaction.user_id == user_id)
-            )
-
-            if transaction:
-                return transaction
-        
-        return None
-
-
 async def get_session():
     async with Session() as session:
         yield session
@@ -143,6 +71,72 @@ async def get_session():
 async def get_session_begin():
     async with Session.begin() as session:
         yield session
+
+class DBHelper:
+    @staticmethod
+    async def get_user(user_id: int, session: AsyncSession = Depends(get_session)):
+        user = await session.scalar(
+            select(User)
+            .where(User.id == user_id)
+        )
+
+        if user:
+            return user
+            
+        return None
+    
+
+    @staticmethod
+    async def get_card(user_id: int, card_id: int, session: AsyncSession = Depends(get_session)):
+        card = await session.scalar(
+            select(Card)
+            .where(Card.id == card_id, Card.user_id == user_id)
+        )
+
+        if card:
+            return card
+        
+        return None
+    
+
+    @staticmethod
+    async def get_account(user_id: int, account_id: int, session: AsyncSession = Depends(get_session)):
+        account = await session.scalar(
+            select(Account)
+            .where(Account.id == account_id, Account.user_id == user_id)
+            .options(joinedload(Account.user))
+        )
+
+        if account:
+            return account
+    
+        return None
+    
+
+    @staticmethod
+    async def get_acc_transaction(user_id: int, transaction_id: int, session: AsyncSession = Depends(get_session)):
+        transaction = await session.scalar(
+            select(AccountTransaction)
+            .where(AccountTransaction.id == transaction_id, AccountTransaction.user_id == user_id)
+        )
+
+        if transaction:
+            return transaction
+    
+        return None
+    
+
+    @staticmethod
+    async def get_transaction(user_id: int, transaction_id: int, session: AsyncSession = Depends(get_session)):
+        transaction = await session.scalar(
+            select(Transaction)
+            .where(Transaction.id == transaction_id, Transaction.user_id == user_id)
+        )
+
+        if transaction:
+            return transaction
+    
+        return None
 
 
 from .models import (
