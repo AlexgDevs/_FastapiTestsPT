@@ -7,6 +7,7 @@ from fastapi import (
     Depends
     )
 
+from .auth import auth_app
 from .user import user_app
 from .card import card_app
 from .account import account_app

@@ -26,6 +26,10 @@ class CreateUserModel(BaseModel):
     email: str
 
 
+class LoginUserModel(BaseModel):
+    name: str
+    password: str
+
 class PatchUserModel(BaseModel):
     name: str | None = None
     password: str | None = None

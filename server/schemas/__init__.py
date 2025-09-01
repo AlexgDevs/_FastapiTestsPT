@@ -1,4 +1,4 @@
-from .user import UserResponse, CreateUserModel, PatchUserModel, PutUpdateModel
+from .user import UserResponse, CreateUserModel, PatchUserModel, PutUpdateModel, LoginUserModel
 from .account import AccountResponse, CreateAccountModel
 from .transactions import TransactionResponse, AccountTransactionResponse, CreateAccountTransactionModel, CreateTransactionModel
 from .card import CardResponse, CreateCardModel

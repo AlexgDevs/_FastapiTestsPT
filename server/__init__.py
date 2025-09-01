@@ -7,7 +7,8 @@ from .routers import (
     card_app,
     account_app,
     acc_transaction_app,
-    transaction_app
+    transaction_app,
+    auth_app
 )
 
 API_URL = 'http://localhost:8000'
@@ -18,3 +19,4 @@ app.include_router(card_app)
 app.include_router(account_app)
 app.include_router(acc_transaction_app)
 app.include_router(transaction_app)
+app.include_router(auth_app)
