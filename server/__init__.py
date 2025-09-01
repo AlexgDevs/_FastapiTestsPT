@@ -10,6 +10,8 @@ from .routers import (
     transaction_app
 )
 
+API_URL = 'http://localhost:8000'
+
 app = FastAPI()
 app.include_router(user_app)
 app.include_router(card_app)

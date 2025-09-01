@@ -1,0 +1,9 @@
+{% from '__helpers.html' import form_generate_auth %}
+
+<div class="auth-content">
+    <h1>Вход</h1>
+    {{ form_generate_auth(form) }}
+    <div class="auth-link">
+        <span>Нет аккаунта? <a href="{{ url_for('register_page') }}">Зарегистрироваться</a></span>
+    </div>
+</div>
