@@ -107,7 +107,7 @@ async def patch_update_user(user_id: int, user_data: PatchUserModel, session: As
             summary='Put update user',
             description='endpoint for put update user')
 async def put_update_user(user_id: int, user_data: PutUpdateModel, session: AsyncSession = Depends(get_session_begin)):
-    user = await DBHelper.get_user(user_id)
+    user = await DBHelper.get_user(user_id, session)
     if user:
         await session.merge(User(id=user.id, **user_data.model_dump()))
         return {'status': 'put updated'}

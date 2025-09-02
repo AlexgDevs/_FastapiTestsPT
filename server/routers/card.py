@@ -55,8 +55,8 @@ async def get_cards_by_user(user_id: int, session: AsyncSession = Depends(get_se
             response_model=CardResponse,
             summary='Get card by card and user id',
             description='endpoint for getting card by card and user id')
-async def get_card_by_card_id(user_id: int, card_id: int):
-    card = await DBHelper.get_card(user_id, card_id)
+async def get_card_by_card_id(user_id: int, card_id: int, session: AsyncSession = Depends(get_session)):
+    card = await DBHelper.get_card(user_id, card_id, session)
     if card:
         return card
 

@@ -74,7 +74,7 @@ async def get_session_begin():
 
 class DBHelper:
     @staticmethod
-    async def get_user(user_id: int, session: AsyncSession = Depends(get_session)):
+    async def get_user(user_id: int, session: AsyncSession):
         user = await session.scalar(
             select(User)
             .where(User.id == user_id)
@@ -87,7 +87,7 @@ class DBHelper:
     
 
     @staticmethod
-    async def get_card(user_id: int, card_id: int, session: AsyncSession = Depends(get_session)):
+    async def get_card(user_id: int, card_id: int, session: AsyncSession):
         card = await session.scalar(
             select(Card)
             .where(Card.id == card_id, Card.user_id == user_id)
@@ -100,7 +100,7 @@ class DBHelper:
     
 
     @staticmethod
-    async def get_account(user_id: int, account_id: int, session: AsyncSession = Depends(get_session)):
+    async def get_account(user_id: int, account_id: int, session: AsyncSession):
         account = await session.scalar(
             select(Account)
             .where(Account.id == account_id, Account.user_id == user_id)
@@ -114,7 +114,7 @@ class DBHelper:
     
 
     @staticmethod
-    async def get_acc_transaction(user_id: int, transaction_id: int, session: AsyncSession = Depends(get_session)):
+    async def get_acc_transaction(user_id: int, transaction_id: int, session: AsyncSession):
         transaction = await session.scalar(
             select(AccountTransaction)
             .where(AccountTransaction.id == transaction_id, AccountTransaction.user_id == user_id)
@@ -127,7 +127,7 @@ class DBHelper:
     
 
     @staticmethod
-    async def get_transaction(user_id: int, transaction_id: int, session: AsyncSession = Depends(get_session)):
+    async def get_transaction(user_id: int, transaction_id: int, session: AsyncSession):
         transaction = await session.scalar(
             select(Transaction)
             .where(Transaction.id == transaction_id, Transaction.user_id == user_id)

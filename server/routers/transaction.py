@@ -71,7 +71,7 @@ async def create_transaction(
                             summary='Delete transaction',
                             description='endpoint for deleted transactions')
 async def delete_transaction(user_id: int, transaction_id: int, session: AsyncSession = Depends(get_session_begin)):
-    transaction = await DBHelper.get_transaction(user_id, transaction_id)
+    transaction = await DBHelper.get_transaction(user_id, transaction_id, session)
     if transaction:
         await session.delete(transaction)
         return {'status': 'deleted'}

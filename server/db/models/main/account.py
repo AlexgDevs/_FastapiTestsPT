@@ -17,7 +17,7 @@ class Account(Base):
     __tablename__ = 'accounts'
     account_number: Mapped[str] = mapped_column(String(20), default=lambda: ''.join(choice(string.digits) for _ in range(20)))
     account_name: Mapped[str] = mapped_column(String(150), default='Main face account')
-    balance: Mapped[int]
+    balance: Mapped[int] = mapped_column(default=0)
     created_at: Mapped[DateTime] = mapped_column(DateTime, default=datetime.now)
 
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))

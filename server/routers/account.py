@@ -56,8 +56,8 @@ async def get_accounts_by_user(user_id: int, session: AsyncSession = Depends(get
                 response_model=AccountResponse,
                 summary='Get account by user and account id',
                 description='enpoind for getting account by user and account id')
-async def get_account_by_user_account_id(user_id: int, account_id: int):
-    account = await DBHelper.get_account(user_id, account_id)
+async def get_account_by_user_account_id(user_id: int, account_id: int, session: AsyncSession = Depends(get_session)):
+    account = await DBHelper.get_account(user_id, account_id, session)
     if account:
         return account
     

@@ -17,21 +17,23 @@
     <div class="accounts">
         {% if user.get('accounts') %}
             {% for account in user.get('accounts') %}
-                <div class="account-content">
-                    <div class="account-name">
-                        {{ account.get('account_name') }}
+                <a href="{{ url_for('current_account') }}?account_id={{ account.get('id') }}">
+                    <div class="account-content">
+                        <div class="account-name">
+                            {{ account.get('account_name') }}
+                        </div>
+                        <div class="account-number">
+                            <span>Номер счета: ***{{ account.get('account_number')[-4:] }}</span>
+                        </div>
+                        <div class="account-balance">
+                            {{ account.get('balance') }}
+                        </div>
                     </div>
-                    <div class="account-number">
-                        <span>Номер счета: {{ account.get('account_number')[:4] }}****************</span>
-                    </div>
-                    <div class="account-balance">
-                        {{ account.get('balance') }}
-                    </div>
-                </div>
+                </a>
             {% endfor %}
         {% else %}
             <span>У вас сейчас нет ниодного счета. Хотите создать ?</span>
-            <a href="#">Создать аккаунт</a>
+            <a href="#">Создать счет</a>
         {% endif %}
     </div>
     <div class="last-transactions-content">
@@ -39,8 +41,8 @@
         {% if user.get('transactions') %}
             {% for transaction in user.get('transactions') %}
                 <div class="transaction">
-                    {{ transaction.get('created_at') }}
-                    {{ transaction.get('amount') }}
+                    время совершения транзакции: {{ transaction.get('created_at') }}
+                    сумма: {{ transaction.get('amount') }}
                 </div>
             {% endfor %}
         {% else %}

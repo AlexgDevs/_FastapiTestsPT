@@ -1,0 +1,77 @@
+{% extends '__base.html' %}
+
+{% block content %}
+<div class="account-balance-section">
+    <div class="balance-amount">
+        {{ account.get('balance', 0) }}
+    </div>
+    <div class="balance-actions">
+        <button class="btn-primary" onclick="location.href='/deposit'">Пополнить</button>
+        <button class="btn-secondary" onclick="location.href='/transfer'">Перевести</button>
+        <button class="btn-outline" onclick="location.href='/withdraw'">Вывести</button>
+    </div>
+</div>
+
+<div class="cards-section">
+    <div class="section-header">
+        <h2>Привязанные карты</h2>
+        <button class="btn-link" onclick="location.href='/add-card'">+ Добавить карту</button>
+    </div>
+    
+    {% if account.get('cards') %}
+        <div class="cards-grid">
+            {% for card in account.get('cards') %}
+                <div class="card-item">
+                    <div class="card-chip">⌬</div>
+                    <div class="card-number">
+                        ●●●● {{ card.get('card_number')[-4:] }}
+                    </div>
+                    <div class="name-container">
+                        {{ card.get('cardholder_name', 'Владелец карты') }}
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-expiry">{{ card.get('expiry_date', 'MM/YY') }}</span>
+                        <button class="card-remove" onclick="removeCard('{{ card.id }}')">×</button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>Нет привязанных карт</p>
+            <button class="btn-primary" onclick="location.href='/add-card'">Привязать карту</button>
+        </div>
+    {% endif %}
+</div>
+
+<div class="transactions-section">
+    <div class="section-header">
+        <h2>История операций</h2>
+        <button class="btn-link" onclick="location.href='/transactions'">Все операции</button>
+    </div>
+    
+    {% if account.get('transactions') %}
+        <div class="transactions-list">
+            {% for transaction in account.get('transactions') %}
+                <div class="transaction-item {% if transaction.get('amount', 0) > 0 %}income{% else %}expense{% endif %}">
+                    <div class="transaction-icon">
+                        {% if transaction.get('amount', 0) > 0 %}↑{% else %}↓{% endif %}
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-date">
+                            {{ transaction.get('created_at') }}
+                        </div>
+                    </div>
+                    <div class="transaction-amount">
+                        {{ transaction.get('amount', 0) }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>Операций по счету не было</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
