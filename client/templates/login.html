@@ -2,7 +2,7 @@
 
 <div class="auth-content">
     <h1>Вход</h1>
-    {{ form_generate_auth(form) }}
+    {{ form_generate_auth(form, action='/login') }}
     <div class="auth-link">
         <span>Нет аккаунта? <a href="{{ url_for('register_page') }}">Зарегистрироваться</a></span>
     </div>

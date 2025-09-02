@@ -1,0 +1,60 @@
+{% extends '__base.html' %}
+
+{% block content %}
+<main class="dashboard-content">
+    <div class="welcome-content">
+        <h2>Здравствуйте, <strong>{{ user.get('name') }}</strong></h2>
+        <div class="bell-notifications">
+            🔔
+        </div>
+    </div>
+    <div class="total-amount-invoices">
+        <span><strong>Ваша общая сумма за все счета</strong></span>
+        <div class="custom-accounts-sum">
+            {{ user.get('accounts') | sum(attribute='balance')}}
+        </div>
+    </div>
+    <div class="accounts">
+        {% if user.get('accounts') %}
+            {% for account in user.get('accounts') %}
+                <div class="account-content">
+                    <div class="account-name">
+                        {{ account.get('account_name') }}
+                    </div>
+                    <div class="account-number">
+                        <span>Номер счета: {{ account.get('account_number')[:4] }}****************</span>
+                    </div>
+                    <div class="account-balance">
+                        {{ account.get('balance') }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <span>У вас сейчас нет ниодного счета. Хотите создать ?</span>
+            <a href="#">Создать аккаунт</a>
+        {% endif %}
+    </div>
+    <div class="last-transactions-content">
+        <h4>Последние транзакции:</h4>
+        {% if user.get('transactions') %}
+            {% for transaction in user.get('transactions') %}
+                <div class="transaction">
+                    {{ transaction.get('created_at') }}
+                    {{ transaction.get('amount') }}
+                </div>
+            {% endfor %}
+        {% else %}
+        <span>У вас небыло совершенно ниодной транзакции</span>
+        {% endif %}
+    </div>
+    <div class="quick-action-menu">
+        <ul>
+            <li><a href="#">Пополнить</a></li>
+            <li><a href="#">Перевод</a></li>
+            <li><a href="#">Вывести</a></li>
+            <li><a href="#">Карты</a></li>
+            <li><a href="#">Еще</a></li>
+        </ul>
+    </div>
+</main>
+{% endblock %}

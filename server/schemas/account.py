@@ -12,6 +12,7 @@ class UserAccountResponse(BaseModel):
 
 class AccountResponse(BaseModel):
     id: int
+    account_number: str
     account_name: str
     balance: int 
     created_at: datetime

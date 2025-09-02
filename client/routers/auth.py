@@ -35,7 +35,7 @@ async def login_page():
 
 
 @app.get('/logout-page')
-@guest_required
+@auth_required
 async def logout_page():
     return render_template('logout.html')
 
