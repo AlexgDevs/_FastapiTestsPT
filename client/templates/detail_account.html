@@ -15,7 +15,7 @@
 <div class="cards-section">
     <div class="section-header">
         <h2>Привязанные карты</h2>
-        <button class="btn-link" onclick="location.href='/add-card'">+ Добавить карту</button>
+        <button class="btn-link" data-account-id='{{ account.get("id") }}' onclick="addCard(this)">+ Добавить карту</button>
     </div>
     
     {% if account.get('cards') %}
@@ -74,4 +74,13 @@
         </div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function addCard(button) {
+    const accountId = button.getAttribute('data-account-id');
+    location.href = `/add-card?account_id=${accountId}`;
+}
+</script>
 {% endblock %}

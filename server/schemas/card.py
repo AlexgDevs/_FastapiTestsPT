@@ -24,10 +24,6 @@ class CardResponse(BaseModel):
 
 
 class CreateCardModel(BaseModel):
-    cardholder_name: str  
-    card_number: str
-    cvv: str 
-    expire_date: str  
-    created_at: datetime
+    cardholder_name: str
     user_id: int
     account_id: int

@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 from pydantic import BaseModel
 
 
@@ -9,6 +10,7 @@ class UserAccountResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
 
 class AccountResponse(BaseModel):
     id: int
@@ -24,5 +26,4 @@ class AccountResponse(BaseModel):
 
 class CreateAccountModel(BaseModel):
     account_name: str
-    balance: int
     user_id: int

@@ -33,7 +33,7 @@
             {% endfor %}
         {% else %}
             <span>У вас сейчас нет ниодного счета. Хотите создать ?</span>
-            <a href="#">Создать счет</a>
+            <a href="{{ url_for('add_account_page') }}">Создать счет</a>
         {% endif %}
     </div>
     <div class="last-transactions-content">

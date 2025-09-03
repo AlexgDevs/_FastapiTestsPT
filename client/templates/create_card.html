@@ -1,0 +1,7 @@
+{% from '__helpers.html' import form_generate_components %}
+
+<div class="card-form-content">
+    <div class="component-form">
+        {{ form_generate_components(form, '/add-card', account_id=account_id) }}
+    </div>
+</div>

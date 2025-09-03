@@ -21,3 +21,29 @@
     {% endfor %}
 </form>
 {% endmacro %}
+
+
+{% macro form_generate_components(form, action='', user_id=None, card_id=None, account_id=None) %}
+<form action="{{ action }}" method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <input type="hidden" name="account_id" value="{{ account_id }}">
+    {% for field in form if field.widget.input_type != 'hidden' %}
+        {% if field.widget.input_type != "submit" %}
+        <div class="field">
+            {{ field.label }} {{ field }}
+        </div> 
+        {% else %}
+        <div class="field">
+            {{ field }}
+        </div> 
+        {% endif %}
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <div class="field_error">
+                    <strong>{{ error }}</strong>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+</form>
+{% endmacro %}

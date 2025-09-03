@@ -1,3 +1,5 @@
+from datetime import timedelta
+import random
 from typing import List
 from ... import (
     Base,
@@ -14,9 +16,9 @@ from ... import (
 class Card(Base):
     __tablename__ = 'cards'
     cardholder_name: Mapped[str] = mapped_column(String(150))
-    card_number: Mapped[str] = mapped_column(String(16))
-    cvv: Mapped[str] = mapped_column(String(3))
-    expire_date: Mapped[str] = mapped_column(String(5))
+    card_number: Mapped[str] = mapped_column(String(16),  default=lambda: '4' + ''.join([str(random.randint(0, 9)) for _ in range(15)]))
+    cvv: Mapped[str] = mapped_column(String(3),  default=lambda: ''.join([str(random.randint(0, 9)) for _ in range(3)]))
+    expire_date: Mapped[str] = mapped_column(String(5), default=lambda: (datetime.now() + timedelta(days=365*3)).strftime('%m/%y'))
     created_at: Mapped[DateTime] = mapped_column(DateTime, default=datetime.now)
 
     account_id: Mapped[int] = mapped_column(ForeignKey('accounts.id'))

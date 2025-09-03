@@ -13,7 +13,8 @@ from ..db import (
     AsyncSession,
     get_session,
     joinedload,
-    get_session_begin
+    get_session_begin,
+    Card
 )
 
 from ..schemas import (
@@ -32,7 +33,10 @@ account_app = APIRouter(prefix='/accounts', tags=['Accounts'])
 async def get_accounts(session: AsyncSession = Depends(get_session)):
     accounts = await session.scalars(
         select(Account)
-        .options(joinedload(Account.user))
+        .options(
+        joinedload(Account.user),
+        joinedload(Account.cards).joinedload(Card.user)
+        )
     )
 
     return accounts.unique().all()
@@ -45,10 +49,11 @@ async def get_accounts(session: AsyncSession = Depends(get_session)):
 async def get_accounts_by_user(user_id: int, session: AsyncSession = Depends(get_session)):
     accounts = await session.scalars(
         select(Account)
-        .where(Account.user_id == user_id)
-        .options(joinedload(Account.user))
+        .options(
+        joinedload(Account.user),
+        joinedload(Account.cards).joinedload(Card.user)
+        )
     )
-
     return accounts.unique().all()
 
 
