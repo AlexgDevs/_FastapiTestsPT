@@ -40,7 +40,8 @@ async def get_all_users():
         users = await session.scalars(
         select(User)
         .options(
-            joinedload(User.cards),
+            joinedload(User.cards).joinedload(Card.user),
+            joinedload(User.accounts).joinedload(Account.cards).joinedload(Card.user),
             joinedload(User.accounts).joinedload(Account.user),
             joinedload(User.account_transactions).joinedload(AccountTransaction.to_account).joinedload(Account.user),
             joinedload(User.account_transactions).joinedload(AccountTransaction.from_account).joinedload(Account.user),
@@ -62,8 +63,8 @@ async def get_user_by_id(user_id: int, session: AsyncSession = Depends(get_sessi
         select(User)
         .where(User.id == user_id)
         .options(
-            joinedload(User.cards),
-            joinedload(User.accounts),
+            joinedload(User.cards).joinedload(Card.user),
+            joinedload(User.accounts).joinedload(Account.cards).joinedload(Card.user),
             joinedload(User.transactions),
             joinedload(User.account_transactions))
     )

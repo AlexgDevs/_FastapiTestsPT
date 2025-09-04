@@ -35,6 +35,7 @@ async def get_transactions(session: AsyncSession = Depends(get_session)):
         select(Transaction)
         .options(
             joinedload(Transaction.account).joinedload(Account.user),
+            joinedload(Transaction.account).joinedload(Account.cards).joinedload(Card.user),
             joinedload(Transaction.card)
         ))
 
@@ -51,6 +52,7 @@ async def get_transactions_by_user(user_id: int, session: AsyncSession = Depends
         .where(Transaction.user_id == user_id)
         .options(
             joinedload(Transaction.account).joinedload(Account.user),
+            joinedload(Transaction.account).joinedload(Account.cards).joinedload(Card.user),
             joinedload(Transaction.card)
         ))
     return transactions.unique().all()

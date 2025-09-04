@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List
 from pydantic import BaseModel
 
+from .card import CardResponse
 
 class UserAccountResponse(BaseModel):
     id: int
@@ -19,6 +20,7 @@ class AccountResponse(BaseModel):
     balance: int 
     created_at: datetime
     user: UserAccountResponse
+    cards: List[CardResponse]
 
     class Config:
         from_attributes = True

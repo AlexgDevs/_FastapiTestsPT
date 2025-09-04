@@ -104,7 +104,9 @@ class DBHelper:
         account = await session.scalar(
             select(Account)
             .where(Account.id == account_id, Account.user_id == user_id)
-            .options(joinedload(Account.user))
+            .options(
+                joinedload(Account.user),
+                joinedload(Account.cards).joinedload(Card.user))
         )
 
         if account:

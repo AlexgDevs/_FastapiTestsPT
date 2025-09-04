@@ -36,7 +36,9 @@ async def get_account_transactions(session: AsyncSession = Depends(get_session))
         select(AccountTransaction)
         .options(
             joinedload(AccountTransaction.to_account).joinedload(Account.user),
+            joinedload(AccountTransaction.to_account).joinedload(Account.cards).joinedload(Card.user),
             joinedload(AccountTransaction.from_account).joinedload(Account.user),
+            joinedload(AccountTransaction.from_account).joinedload(Account.cards).joinedload(Card.user),
             joinedload(AccountTransaction.card).joinedload(Card.user)
         ))
 
@@ -53,7 +55,9 @@ async def get_account_transactions_by_user(user_id: int, session: AsyncSession =
         .where(AccountTransaction.user_id == user_id)
         .options(
             joinedload(AccountTransaction.to_account).joinedload(Account.user),
+            joinedload(AccountTransaction.to_account).joinedload(Account.cards).joinedload(Card.user),
             joinedload(AccountTransaction.from_account).joinedload(Account.user),
+            joinedload(AccountTransaction.from_account).joinedload(Account.cards).joinedload(Card.user),
             joinedload(AccountTransaction.card).joinedload(Card.user)
         ))
 
